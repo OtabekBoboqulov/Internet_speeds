@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Drag & Drop Adventure</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000 url('https://www.transparenttextures.com/patterns/stardust.png');
+            font-family: 'Comic Sans MS', cursive;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .image-zone {
+            width: 100%;
+            min-height: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .tech-image {
+            height: 100px;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-image:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .tech-image.dragging {
+            opacity: 0.6;
+            cursor: grabbing;
+        }
+
+        .box-zone {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .tech-box {
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px dashed #fff;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tech-box.dragover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: scale(1.05);
+            border-color: #0f0;
+        }
+
+        .tech-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            text-shadow: 0 0 10px #fff;
+            margin-bottom: 30px;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #fff; }
+            50% { text-shadow: 0 0 20px #fff, 0 0 30px #ff0; }
+            100% { text-shadow: 0 0 10px #fff; }
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            z-index: 10;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .tooltip img {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            vertical-align: middle;
+        }
+
+        .tooltip span {
+            color: white;
+            font-size: 14px;
+        }
+
+        .tech-box:hover .tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drag Tech to Its Speed Zone!</h1>
+    <div class="container">
+        <div class="image-zone">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.freepnglogos.com%2Fuploads%2Fyoutube-icon-logo-7.png&f=1&nofb=1&ipt=083f7e600a804a12293db8cf7c262c5cfe51698684c0bab8c8e8529e6e93bb4d&ipo=images" alt="YouTube" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpngimg.com%2Fuploads%2Fnetflix%2Fnetflix_PNG15.png&f=1&nofb=1&ipt=1caa766e5ec335cf0707b7e68a194a0fd4a308f1a61244bf2515982e8920ea98&ipo=images" alt="Netflix" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.iconfinder.com%2Fdata%2Ficons%2Fcolor-svg-vector-icons-2%2F512%2Fsms_text_protocol_message-1024.png&f=1&nofb=1&ipt=a4effbc8cb335a5243dcf6d755e79c7aa7faa8be07487a1d0e032b230babb94c&ipo=images" alt="Text messaging" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpngimg.com%2Fuploads%2Fpubg%2Fpubg_PNG55.png&f=1&nofb=1&ipt=2bad416810aaba3c03d89d91d42cb61e4dcbc10f5ad7f74fab53acb51f2888bd&ipo=images" alt="Online gaming" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2808%2F2808331.png&f=1&nofb=1&ipt=70293ae84227df882f7601015116636d2e1c46117d3a721807f074587b93c69f&ipo=images" alt="IoT" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F8684%2F8684195.png&f=1&nofb=1&ipt=b1e94a1ea129fef83803451c506b02112244cc731c06c73f8040f01b789f58dc&ipo=images" alt="Vioce message" class="tech-image" draggable="true">
+            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftigerlearn.fhsu.edu%2Fwp-content%2Fuploads%2FZoom-Logo.png&f=1&nofb=1&ipt=70e4a5200d9cc84469af59c426702097d3f9eb28d5baf137814b510d4124ed83&ipo=images" alt="Zoom" class="tech-image" draggable="true">
+        </div>
+        <div class="box-zone">
+            <div class="tech-box" data-speed="2G">2G<div class="tooltip"></div></div>
+            <div class="tech-box" data-speed="3G">3G<div class="tooltip"></div></div>
+            <div class="tech-box" data-speed="4G">4G<div class="tooltip"></div></div>
+            <div class="tech-box" data-speed="5G">5G<div class="tooltip"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const images = document.querySelectorAll('.tech-image');
+        const boxes = document.querySelectorAll('.tech-box');
+
+        // Object to store dropped items' sources for each box
+        const droppedItems = {
+            '2G': [],
+            '3G': [],
+            '4G': [],
+            '5G': []
+        };
+
+        images.forEach(image => {
+            image.addEventListener('dragstart', (e) => {
+                image.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', image.src);
+            });
+
+            image.addEventListener('dragend', () => {
+                image.classList.remove('dragging');
+            });
+        });
+
+        boxes.forEach(box => {
+            const speed = box.dataset.speed;
+            const tooltip = box.querySelector('.tooltip');
+
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                box.classList.add('dragover');
+            });
+
+            box.addEventListener('dragleave', () => {
+                box.classList.remove('dragover');
+            });
+
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+                box.classList.remove('dragover');
+                const imgSrc = e.dataTransfer.getData('text/plain');
+                const draggedImage = document.querySelector(`.tech-image[src="${imgSrc}"]`);
+                if (draggedImage) {
+                    draggedImage.style.display = 'none';
+                    box.style.background = 'rgba(0, 255, 0, 0.3)';
+                    setTimeout(() => {
+                        box.style.background = 'rgba(255, 255, 255, 0.1)';
+                    }, 1000);
+                    // Add dropped image source to the list
+                    droppedItems[speed].push(imgSrc);
+                    updateTooltip(tooltip, speed);
+                }
+            });
+
+            // Update tooltip on hover
+            box.addEventListener('mouseenter', () => {
+                updateTooltip(tooltip, speed);
+            });
+        });
+
+        function updateTooltip(tooltip, speed) {
+            tooltip.innerHTML = ''; // Clear previous content
+            if (droppedItems[speed].length === 0) {
+                tooltip.innerHTML = '<span>Nothing dropped here yet!</span>';
+            } else {
+                droppedItems[speed].forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    tooltip.appendChild(img);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
